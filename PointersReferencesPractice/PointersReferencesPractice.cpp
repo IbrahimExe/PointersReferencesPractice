@@ -37,10 +37,29 @@ bool PalindromeChecker(const char* str)
         return true; // A string of length 0 or 1 is a palindrome
     }
 
+    while (start < end)
+    {
+        if (*start != *end)
+        {
+            return false;
+        }
 
+        start++;    // move right
+        end--;      // move left
+    }
+
+    return true; // if middle is reached with all characters matching = palindrome
 }
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    const char* racecar = "racecar";
+    const char* test  = "test";
+    const char* longTest = "testtesttesttesttesttsettsettsettsettset";
+
+    std::cout << racecar << " : " << getStringLength(racecar) << "\n";
+    std::cout << test << " : " << getStringLength(test) << "\n";
+    std::cout << longTest << " : " << getStringLength(longTest) << "\n";
+
+    return 0;
 }
