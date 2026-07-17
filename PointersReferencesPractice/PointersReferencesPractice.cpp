@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 /*
 Part 1:
@@ -50,6 +51,33 @@ bool PalindromeChecker(const char* str)
 
     return true; // if middle is reached with all characters matching = palindrome
 }
+
+/*
+Part 2: 
+    - Create a class object to test.
+    example:
+    - class Student 
+    - string Name;
+    - int StudentId;
+    - operator overloads for:
+    - comparison to see if two objects are the same
+
+    Create list class.
+    - Have it use a linked list as its storing method
+    - Include functions:
+    - Add(<test object>) >> will add the test object created prior to 
+    specific index (should handle if index is invalid)
+    - Remove(int index) >> will remove at a specific index
+    - Remove(<test object>)
+    - PopBack() >> will remove the last item in the list
+    - Print() >> iterate through the list and print all elements
+
+    - Add 5 items to the list, then print
+    - Remove item at index 3, then print
+    - Remove item at index 0, then print
+    - PopBack then print
+*/
+
 
 int main()
 {
