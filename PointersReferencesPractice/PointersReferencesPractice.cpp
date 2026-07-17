@@ -78,6 +78,23 @@ Part 2:
     - PopBack then print
 */
 
+class Student
+{
+public:
+
+private:
+    std::string name;
+
+    int studentID;
+};
+
+class StudentList
+{
+public:
+
+private:
+
+};
 
 int main()
 {
