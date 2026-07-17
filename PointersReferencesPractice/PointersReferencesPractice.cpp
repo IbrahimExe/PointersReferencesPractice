@@ -58,8 +58,16 @@ int main()
     const char* longTest = "testtesttesttesttesttsettsettsettsettset";
 
     std::cout << racecar << " : " << getStringLength(racecar) << "\n";
+    std::cout << racecar << " : " << (PalindromeChecker(racecar)
+        ? "Palindrome" : "Not Palindrome") << "\n";
+
     std::cout << test << " : " << getStringLength(test) << "\n";
+    std::cout << test << " : " << (PalindromeChecker(test)
+        ? "Palindrome" : "Not Palindrome") << "\n";
+
     std::cout << longTest << " : " << getStringLength(longTest) << "\n";
+    std::cout << longTest << " : " << (PalindromeChecker(longTest)
+        ? "Palindrome" : "Not Palindrome") << "\n";
 
     return 0;
 }
