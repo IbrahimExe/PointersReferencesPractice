@@ -288,6 +288,27 @@ public:
     }
 };
 
+/*
+Part 3:
+    Create new list class.
+    - have it use a double linked list s its storing method
+    - include functions:
+        - Add(<test object>) >> will add the test object created prior to the list
+        - Add(<test object>, int index) >> will add the test object created
+          prior to a specific index (should handle if index is invalid)
+    - Remove(int index) >> will remove at a specific index
+    - Remove(<test object>)
+    - PopBack() >> will remove the last item in the list
+    - Print() >> iterate through the list and print all elements
+    - PrintReverse() >> iterate through the list in reverse order and print all elements
+
+
+    - add 5 items to the list, then print as well as print reverse
+    - remove item at index 3, then print s well as print reverse
+    - remove item at index 0, then print as well as print reverse
+    - PopBack then print as well as print reverse
+*/
+
 int main()
 {
     const char* racecar = "racecar";
