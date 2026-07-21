@@ -306,5 +306,30 @@ int main()
     std::cout << longTest << " : " << (PalindromeChecker(longTest)
         ? "Palindrome" : "Not Palindrome") << "\n";
 
+    // Part 2
+    std::cout << "PART 2:\n\n";
+
+    StudentList list;
+
+    // add 5 items to the list, then print
+    list.Add(Student("Ibi", 101));
+    list.Add(Student("Santiago", 102));
+    list.Add(Student("Salmon", 103));
+    list.Add(Student("Gustavo", 104));
+    list.Add(Student("Craig", 105));
+    list.Print();
+
+    // remove item at index 3, then print
+    list.Remove(3);
+    list.Print();
+
+    // remove item at index 0, then print
+    list.Remove(0);
+    list.Print();
+
+    // PopBack then print
+    list.PopBack();
+    list.Print();
+
     return 0;
 }
