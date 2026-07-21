@@ -84,6 +84,12 @@ public:
     std::string name;
     int studentID;
 
+    Student()
+    {
+        name = "";
+        studentID = 0;
+    }
+
     Student(std::string inputName, int inputID)
     {
         name = inputName;
@@ -309,8 +315,296 @@ Part 3:
     - PopBack then print as well as print reverse
 */
 
+class DoublyStudentList 
+{
+private:
+    struct Node 
+    {
+        Student data;
+        Node* next;
+        Node* prev;
+
+        Node(const Student& student) 
+        {
+            data = student;
+            next = nullptr;
+            prev = nullptr;
+        }
+    };
+
+    Node* head;
+    Node* tail;
+
+public:
+    DoublyStudentList() 
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    ~DoublyStudentList() 
+    {
+        while (head != nullptr) 
+        {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+        tail = nullptr;
+    }
+
+    void Add(const Student& student) 
+    {
+        Node* newNode = new Node(student);
+
+        if (head == nullptr) 
+        {
+            head = newNode;
+            tail = newNode;
+            return;
+        }
+
+        tail->next = newNode;
+        newNode->prev = tail;
+        tail = newNode;
+    }
+
+    void Add(const Student& student, int index) 
+    {
+        if (index < 0) 
+        {
+            std::cout << "Invalid index: " << index << "\n";
+            return;
+        }
+
+        Node* newNode = new Node(student);
+
+        // Add at the beginning
+        if (index == 0) 
+        {
+            if (head == nullptr) 
+            {
+                head = newNode;
+                tail = newNode;
+            }
+            else 
+            {
+                newNode->next = head;
+                head->prev = newNode;
+                head = newNode;
+            }
+            return;
+        }
+
+        Node* current = head;
+        int currentIndex = 0;
+
+        while (current != nullptr && currentIndex < index) 
+        {
+            current = current->next;
+            currentIndex++;
+        }
+
+        // Add at the very end (index equals length)
+        if (current == nullptr && currentIndex == index) 
+        {
+            tail->next = newNode;
+            newNode->prev = tail;
+            tail = newNode;
+            return;
+        }
+
+        // Out of bounds check
+        if (current == nullptr) 
+        {
+            std::cout << "Index " << index << " is out of bounds.\n";
+            delete newNode;
+            return;
+        }
+
+        // Insert in the middle
+        Node* previousNode = current->prev;
+
+        previousNode->next = newNode;
+        newNode->prev = previousNode;
+
+        newNode->next = current;
+        current->prev = newNode;
+    }
+
+    void Remove(int index) 
+    {
+        if (head == nullptr || index < 0) 
+        {
+            std::cout << "Invalid index or empty list.\n";
+            return;
+        }
+
+        Node* current = head;
+        int currentIndex = 0;
+
+        while (current != nullptr && currentIndex < index) 
+        {
+            current = current->next;
+            currentIndex++;
+        }
+
+        if (current == nullptr) 
+        {
+            std::cout << "Index " << index << " is out of bounds.\n";
+            return;
+        }
+
+        // If removing the head
+        if (current == head)
+        {
+            head = head->next;
+            if (head != nullptr) 
+            {
+                head->prev = nullptr;
+            }
+            else 
+            {
+                tail = nullptr; // List is now empty
+            }
+            delete current;
+            return;
+        }
+
+        // If removing the tail
+        if (current == tail)
+        {
+            tail = tail->prev;
+            tail->next = nullptr;
+            delete current;
+            return;
+        }
+
+        // Removing from the middle
+        Node* previousNode = current->prev;
+        Node* nextNode = current->next;
+
+        previousNode->next = nextNode;
+        nextNode->prev = previousNode;
+
+        delete current;
+    }
+
+    void Remove(const Student& student)
+    {
+        if (head == nullptr) return;
+
+        Node* current = head;
+
+        while (current != nullptr) 
+        {
+            if (current->data.isEqual(student))
+            {
+                // Remove head match
+                if (current == head) 
+                {
+                    head = head->next;
+                    if (head != nullptr) 
+                    {
+                        head->prev = nullptr;
+                    }
+                    else 
+                    {
+                        tail = nullptr;
+                    }
+                    delete current;
+                    return;
+                }
+
+                // Remove tail match
+                if (current == tail) 
+                {
+                    tail = tail->prev;
+                    tail->next = nullptr;
+                    delete current;
+                    return;
+                }
+
+                // Remove middle match
+                Node* previousNode = current->prev;
+                Node* nextNode = current->next;
+
+                previousNode->next = nextNode;
+                nextNode->prev = previousNode;
+
+                delete current;
+                return;
+            }
+            current = current->next;
+        }
+    }
+
+    void PopBack()
+    {
+        if (tail == nullptr) return;
+
+        Node* temp = tail;
+
+        if (head == tail)
+        { // Only 1 node in list
+            head = nullptr;
+            tail = nullptr;
+        }
+        else 
+        {
+            tail = tail->prev;
+            tail->next = nullptr;
+        }
+
+        delete temp;
+    }
+
+    void Print() const 
+    {
+        if (head == nullptr) 
+        {
+            std::cout << "[Empty List]\n";
+            return;
+        }
+
+        Node* temp = head;
+        int index = 0;
+        std::cout << "Forward Print:\n";
+        while (temp != nullptr) 
+        {
+            std::cout << "  [" << index << "] ID: " << temp->data.studentID
+                << " | Name: " << temp->data.name << "\n";
+            temp = temp->next;
+            index++;
+        }
+    }
+
+    void PrintReverse() const 
+    {
+        if (tail == nullptr) 
+        {
+            std::cout << "[Empty List]\n";
+            return;
+        }
+
+        Node* temp = tail;
+        std::cout << "Reverse Print:\n";
+        while (temp != nullptr) 
+        {
+            std::cout << "  ID: " << temp->data.studentID
+                << " | Name: " << temp->data.name << "\n";
+            temp = temp->prev;
+        }
+        std::cout << "\n";
+    }
+};
+
+
 int main()
 {
+    // PART 1
+    std::cout << "PART 1:\n\n";
+    // Check to see if a const char* string is a palindrome (same in both directions)
     const char* racecar = "racecar";
     const char* test  = "test";
     const char* longTest = "testtesttesttesttesttsettsettsettsettset";
@@ -327,8 +621,9 @@ int main()
     std::cout << longTest << " : " << (PalindromeChecker(longTest)
         ? "Palindrome" : "Not Palindrome") << "\n";
 
-    // Part 2
-    std::cout << "PART 2:\n\n";
+
+    // PART 2
+    std::cout << "\n\nPART 2:\n\n";
 
     StudentList list;
 
@@ -351,6 +646,36 @@ int main()
     // PopBack then print
     list.PopBack();
     list.Print();
+
+
+    // PART 3
+    std::cout << "\n\nPART 3\n\n";
+
+    DoublyStudentList doubleList;
+
+    // add 5 items to the list, then print as well as print reverse
+    doubleList.Add(Student("IbiJeebies", 101));
+    doubleList.Add(Student("SantiagoRantiago", 102));
+    doubleList.Add(Student("SalmonFalmon", 103));
+    doubleList.Add(Student("GustavoMustavo", 104));
+    doubleList.Add(Student("CraigBrigade", 105));
+    doubleList.Print();
+    doubleList.PrintReverse();
+
+    // remove item at index 3, then print as well as print reverse
+    doubleList.Remove(3);
+    doubleList.Print();
+    doubleList.PrintReverse();
+
+    // remove item at index 0, then print as well as print reverse
+    doubleList.Remove(0);
+    doubleList.Print();
+    doubleList.PrintReverse();
+
+    // PopBack then print as well as print reverse
+    doubleList.PopBack();
+    doubleList.Print();
+    doubleList.PrintReverse();
 
     return 0;
 }
