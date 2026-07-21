@@ -81,19 +81,211 @@ Part 2:
 class Student
 {
 public:
-
-private:
     std::string name;
-
     int studentID;
+
+    Student(std::string inputName, int inputID)
+    {
+        name = inputName;
+        studentID = inputID;
+    }
+
+    bool isEqual(const Student& other)
+    {
+        if (name == other.name && studentID == other.studentID)
+        {
+            return true;
+        }
+
+        return false;
+    }
 };
 
-class StudentList
+class StudentList 
 {
-public:
-
 private:
+    struct Node 
+    {
+        Student data;
+        Node* next;
 
+        Node(const Student& student) : data(student), next(nullptr) {}
+    };
+
+    Node* head;
+
+public:
+    StudentList() : head(nullptr) {}
+
+    ~StudentList() 
+    {
+        while (head != nullptr) 
+        {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+    void Add(const Student& student) 
+    {
+        Node* newNode = new Node(student);
+        if (head == nullptr) 
+        {
+            head = newNode;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp->next != nullptr) 
+        {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+
+    void Add(const Student& student, int index) 
+    {
+        if (index < 0) 
+        {
+            std::cout << "Invalid index: " << index << "\n";
+            return;
+        }
+
+        Node* newNode = new Node(student);
+
+        if (index == 0) 
+        {
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+
+        Node* temp = head;
+        int currentIndex = 0;
+
+        while (temp != nullptr && currentIndex < index - 1) 
+        {
+            temp = temp->next;
+            currentIndex++;
+        }
+
+        if (temp == nullptr) 
+        {
+            std::cout << "Index " << index << " is out of bounds.\n";
+            delete newNode;
+            return;
+        }
+
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+
+    void Remove(int index) 
+    {
+        if (head == nullptr || index < 0) 
+        {
+            std::cout << "Invalid index or empty list.\n";
+            return;
+        }
+
+        if (index == 0) 
+        {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* temp = head;
+        int currentIndex = 0;
+
+        while (temp->next != nullptr && currentIndex < index - 1) 
+        {
+            temp = temp->next;
+            currentIndex++;
+        }
+
+        if (temp->next == nullptr) 
+        {
+            std::cout << "Index " << index << " is out of bounds.\n";
+            return;
+        }
+
+        Node* nodeToDelete = temp->next;
+        temp->next = temp->next->next;
+        delete nodeToDelete;
+    }
+
+    void Remove(const Student& student)
+    {
+        if (head == nullptr) return;
+
+        if (head->data.isEqual(student))
+        {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp->next != nullptr) 
+        {
+            if (temp->next->data.isEqual(student))
+            {
+                Node* nodeToDelete = temp->next;
+                temp->next = temp->next->next;
+                delete nodeToDelete;
+                return;
+            }
+            temp = temp->next;
+        }
+    }
+
+    void PopBack() 
+    {
+        if (head == nullptr) 
+        {
+            return;
+        }
+
+        if (head->next == nullptr) 
+        {
+            delete head;
+            head = nullptr;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp->next->next != nullptr) 
+        {
+            temp = temp->next;
+        }
+
+        delete temp->next;
+        temp->next = nullptr;
+    }
+
+    void Print() const 
+    {
+        if (head == nullptr) 
+        {
+            std::cout << "empty list\n";
+            return;
+        }
+
+        Node* temp = head;
+        int index = 0;
+        while (temp != nullptr) 
+        {
+            std::cout << "  [" << index << "] ID: " << temp->data.studentID
+                << " | Name: " << temp->data.name << "\n";
+            temp = temp->next;
+            index++;
+        }
+        std::cout << "\n";
+    }
 };
 
 int main()
